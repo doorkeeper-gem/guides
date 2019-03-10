@@ -5,6 +5,7 @@
 ## Ruby on Rails
 
 * [Getting Started](ruby-on-rails/getting-started.md)
+* [Protecting Your Resources](ruby-on-rails/protecting-your-resources.md)
 * [API Mode](ruby-on-rails/api-mode.md)
 * [Routes](ruby-on-rails/routes.md)
 
