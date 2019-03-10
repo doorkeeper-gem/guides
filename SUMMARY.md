@@ -26,6 +26,8 @@
 * [Internationalization \(i18n\)](internals/internationalization-i18n.md)
 * [Rake](internals/rake.md)
 * [Cleaning Up](internals/cleaning-up.md)
+* [Testing](internals/testing.md)
+* [Upgrading](internals/upgrading.md)
 
 ## Concepts
 
