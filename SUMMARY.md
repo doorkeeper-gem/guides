@@ -41,5 +41,6 @@
 ## Configuration
 
 * [Scopes](configuration/scopes.md)
+* [Skip Authorization](configuration/skip-authorization.md)
 * [Other Configurations](configuration/other-configurations.md)
 
