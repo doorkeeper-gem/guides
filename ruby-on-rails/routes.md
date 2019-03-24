@@ -1,6 +1,6 @@
 # Routes
 
-The installation script will also automatically add the Doorkeeper routes into your app, like this:
+The installation script will also automatically add the Doorkeeper routes into your app:
 
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}
@@ -37,23 +37,7 @@ oauth_authorized_applications GET    /oauth/authorized_applications(.:format)   
 
 ```
 
-For more information on how to customize routes, check out [this page on the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
+At this point on the guide, we're not going to change the routes. For more information on how to customize them, check out [this page on the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
 
-#### Route Constraints and other integrations
 
-You can leverage the `Doorkeeper.authenticate` facade to easily extract a `Doorkeeper::OAuth::Token` based on the current request. You can then ensure that token is still good, find its associated `#resource_owner_id`, etc.
-
-```ruby
-module Constraint
-  class Authenticated
-
-    def matches?(request)
-      token = Doorkeeper.authenticate(request)
-      token && token.accessible?
-    end
-  end
-end
-```
-
-For more information about integration and other integrations, check out [the related wiki page](https://github.com/doorkeeper-gem/doorkeeper/wiki/ActionController::Metal-with-doorkeeper).
 

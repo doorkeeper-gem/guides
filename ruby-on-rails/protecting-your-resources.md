@@ -1,4 +1,4 @@
-# Protecting Your Resources
+# Securing the API
 
 To protect your controllers \(usual one or `ActionController::API`\) with OAuth, you just need to setup `before_action`s specifying the actions you want to protect. For example:
 

@@ -4,13 +4,17 @@ Doorkeeper is an oAuth2 provider built in Ruby. It integrates with Ruby on Rails
 
 ## Installation
 
-Installation depends on the framework you're using. The first step is to add the following to your Gemfile:
+The installation process depends on the framework you're using. The first step is to add `doorkeeper` to your `Gemfile`:
 
+{% code-tabs %}
+{% code-tabs-item title="Gemfile" %}
 ```ruby
 gem 'doorkeeper'
 ```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
-And run `bundle install`. After this, check out the guide related to the framework you're using.
+And run `bundle install`. After this, make sure to follow the guide related to the framework you're using below.
 
 ### Ruby on Rails
 
@@ -22,7 +26,7 @@ Guide for integration with Grape framework can be found [here](grape/grape.md).
 
 ### ORMs
 
-Doorkeeper supports Active Record by default, but can be configured to work with the following ORMs:
+Doorkeeper supports `ActiveRecord` by default, but can be configured to work with the following ORMs:
 
 | ORM | Support via |
 | :--- | :--- |

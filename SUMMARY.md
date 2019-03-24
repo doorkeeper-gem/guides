@@ -5,9 +5,12 @@
 ## Ruby on Rails
 
 * [Getting Started](ruby-on-rails/getting-started.md)
-* [Protecting Your Resources](ruby-on-rails/protecting-your-resources.md)
-* [API Mode](ruby-on-rails/api-mode.md)
 * [Routes](ruby-on-rails/routes.md)
+* [Configuration](ruby-on-rails/configuration.md)
+* [Scopes](ruby-on-rails/scopes.md)
+* [Securing the API](ruby-on-rails/protecting-your-resources.md)
+* [API Mode](ruby-on-rails/api-mode.md)
+* [PKCE Flow](ruby-on-rails/pkce-flow.md)
 
 ## Grape
 
@@ -33,6 +36,8 @@
 
 * [Application](concepts/application.md)
 * [Resource Owner](concepts/resource-owner.md)
+* [Access Grant](concepts/access-grant.md)
+* [Access Token](concepts/access-token.md)
 
 ## Security
 
@@ -43,4 +48,5 @@
 * [Scopes](configuration/scopes.md)
 * [Skip Authorization](configuration/skip-authorization.md)
 * [Other Configurations](configuration/other-configurations.md)
+* [Route Constraints and other integrations](configuration/route-constraints-and-other-integrations.md)
 
