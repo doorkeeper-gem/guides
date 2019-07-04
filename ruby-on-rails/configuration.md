@@ -29,7 +29,7 @@ You may want to check other ways of authentication [here](https://github.com/doo
 
 ## Application Management Authentication
 
-By default, the applications list in `/oauth/applications` is unavailable. To let users see and manage **all applications**, you should `admin_authenticator` block:
+By default, the applications list in `/oauth/applications` is unavailable. To let users see and manage **all applications**, you should configure `admin_authenticator` block:
 
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}

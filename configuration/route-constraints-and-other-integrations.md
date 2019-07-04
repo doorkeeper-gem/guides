@@ -8,7 +8,7 @@ module Constraint
 
     def matches?(request)
       token = Doorkeeper.authenticate(request)
-      token && token.accessible?
+      token&.accessible?
     end
   end
 end
