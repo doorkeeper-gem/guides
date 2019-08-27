@@ -7,6 +7,7 @@ By default Doorkeeper uses full Rails stack to provide all the OAuth 2 functiona
 ```ruby
 Doorkeeper.configure do
   api_only
+  basecontroller 'ActionController::API'
 end
 ```
 {% endcode-tabs-item %}
@@ -14,3 +15,8 @@ end
 
 Keep in mind, that in this mode you will not be able to access `Applications` or `Authorized Applications` controllers because they will be skipped. CSRF protections \(which are otherwise enabled\) will be skipped, and all the redirects will be returned as JSON response with corresponding locations.
 
+In order to add Applications for authorizing, you will need to create them via console:
+
+```ruby
+Doorkeeper::Application.create(name: "MyApp", redirect_uri: "urn:ietf:wg:oauth:2.0:oob", scopes: ["read", "write"])
+```
