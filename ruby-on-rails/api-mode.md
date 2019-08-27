@@ -7,7 +7,7 @@ By default Doorkeeper uses full Rails stack to provide all the OAuth 2 functiona
 ```ruby
 Doorkeeper.configure do
   api_only
-  basecontroller 'ActionController::API'
+  base_controller 'ActionController::API'
 end
 ```
 {% endcode-tabs-item %}
