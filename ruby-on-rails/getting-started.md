@@ -1,14 +1,14 @@
 # Getting Started
 
 {% hint style="warning" %}
-This guide is relevant for **Ruby on Rails** with **ActiveRecord**. It assumes you have an **User** model using [Devise](https://github.com/plataformatec/devise) as the authentication framework.
+This guide is relevant for **Ruby on Rails** with **ActiveRecord**. It assumes you have a **User** model using [Devise](https://github.com/plataformatec/devise) as the authentication framework.
 
 If you want to see how doorkeeper integrates with an existing application, check out the [doorkeeper-provider-app](https://github.com/doorkeeper-gem/doorkeeper-provider-app/) repository, which is based on this guide.
 {% endhint %}
 
 ## Installation
 
-The first step is to add Doorkeeper to you project's dependencies:
+The first step is to add Doorkeeper to your project's dependencies:
 
 ```text
 bundle add doorkeeper
@@ -22,8 +22,8 @@ bundle exec rails generate doorkeeper:install
 
 This will introduce three changes:
 
-1. New **initializer** in `config/initializers/doorkeeper.rb`
-2. Add a doorkeeper's **routes** to your `config/routes.rb`
+1. A new **initializer** in `config/initializers/doorkeeper.rb`
+2. Add doorkeeper's **routes** to `config/routes.rb`
 3. **Locale** files in `config/locales/doorkeeper.en.yml`
 
 ## Migrations
@@ -35,13 +35,13 @@ $ bundle exec rails generate doorkeeper:migration
     create  db/migrate/20190324080634_create_doorkeeper_tables.rb
 ```
 
-This migration will create all necessary tables that will hold [oAuth2 Applications](../concepts/application.md), [Access Grants](../concepts/access-grant.md) and [Access Tokens](../concepts/access-token.md). See [the database design](../internals/database-design.md) for more details.
+This migration will create all necessary tables for [oAuth2 Applications](../concepts/application.md), [Access Grants](../concepts/access-grant.md), and [Access Tokens](../concepts/access-token.md). See [the database design](../internals/database-design.md) for more details.
 
 NOTE: If using UUIDs instead of integer IDs, see [Using PostgreSQL UUIDs as primary keys with Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-PostgreSQL-UUIDs-as-primary-keys-with-Doorkeeper) for changes you will need to make to your migration.
 
 #### Integrating with existing User Model
 
-Before executing the migration, you may want to add foreign keys to the doorkeeper's tables to ensure data integrity. Go to the migration file and uncomment the lines below:
+Before executing the migration, you may want to add foreign keys to doorkeeper's tables to ensure data integrity. Go to the migration file and uncomment the lines below:
 
 {% code-tabs %}
 {% code-tabs-item title="db/migrate/20190324080634\_create\_doorkeeper\_tables.rb" %}
