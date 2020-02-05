@@ -3,7 +3,7 @@
 The installation script will also automatically add the Doorkeeper routes into your app:
 
 {% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% code-tabs-item title="config/routes.rb" %}
 ```ruby
 Rails.application.routes.draw do
   use_doorkeeper
