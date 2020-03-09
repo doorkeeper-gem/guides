@@ -50,6 +50,18 @@ class YourExtension
 end
 ```
 
+Then your extension configuration will look like:
+
+```ruby
+# config/initializers/your_extension.rb
+YourExtension.configure do
+  expiration_time 15.minutes
+  skip_something true
+
+  enforce_something
+end
+```
+
 Take a look at Doorkeeper config file to get more examples of options DSL and it's arguments.
 
 ## Examples
