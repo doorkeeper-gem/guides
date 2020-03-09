@@ -31,6 +31,7 @@
 * [Cleaning Up](internals/cleaning-up.md)
 * [Testing](internals/testing.md)
 * [Upgrading](internals/upgrading.md)
+* [Creating extensions](internals/creating-extensions.md)
 
 ## Concepts
 
