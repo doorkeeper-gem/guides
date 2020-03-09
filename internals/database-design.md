@@ -10,7 +10,7 @@
 | **secret** | Used together with `uid` for client authentication |
 | **redirect\_uri** | Redirects the resource owner to this URI \([spec](https://tools.ietf.org/html/rfc6749#section-3.1.2)\) |
 | **scopes** | Defines which [scopes](../configuration/scopes.md) the application uses |
-| **confidential** |  |
+| **confidential** | Indicates whether client public or private |
 
 
 
