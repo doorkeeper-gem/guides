@@ -11,6 +11,7 @@
 * [Securing the API](ruby-on-rails/protecting-your-resources.md)
 * [API Mode](ruby-on-rails/api-mode.md)
 * [PKCE Flow](ruby-on-rails/pkce-flow.md)
+* [Polymorphic Resource Owner](ruby-on-rails/polymorphic-resource-owner.md)
 
 ## Grape
 
@@ -51,4 +52,3 @@
 * [Skip Authorization](configuration/skip-authorization.md)
 * [Other Configurations](configuration/other-configurations.md)
 * [Route Constraints and other integrations](configuration/route-constraints-and-other-integrations.md)
-
