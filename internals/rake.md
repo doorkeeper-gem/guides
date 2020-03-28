@@ -1,12 +1,13 @@
 # Rake
 
-If you are using `rake`, you can load rake tasks provided by this gem, by adding the following line to your `Rakefile`:
+If you are using `rake`, you can load rake tasks provided by this gem, by adding
+the following line to your `Rakefile`:
 
 ```ruby
 Doorkeeper::Rake.load_tasks
 ```
 
-## Cleaning up teh database
+## Cleaning up the database
 
 By default Doorkeeper is retaining expired and revoked access tokens and grants.
 This allows to keep an audit log of those records, but it also leads to the
