@@ -24,7 +24,7 @@ end
 Generate migration to add polymorphic columns to tables:
 
 ```bash
-$ bundle exec rails g doorkeeper:enable_polymorphic_resource_owner
+$ bundle exec rails g doorkeeper:polymorphic_resource_owner
 ```
 
 If you previously set foreign key for `:resource_owner_id` column - you need to drop it as now it
