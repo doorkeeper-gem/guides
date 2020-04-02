@@ -17,7 +17,7 @@ module API
         doorkeeper_authorize!
       end
 
-      # God old versions of Grape:
+      # For old versions of Grape:
       #   route_setting :scopes, ['user:email']
       #
       get :me, scopes: [:user, :read] do
