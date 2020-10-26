@@ -6,7 +6,7 @@
 | :--- | :--- |
 | **id** | Primary key, in case of using RDBMs |
 | **name** | Application name |
-| **uid** | Unique ID, used as [_client identifier_](https://tools.ietf.org/html/rfc6749#section-2.2)\_\_ |
+| **uid** | Unique ID, used as [_client identifier_](https://tools.ietf.org/html/rfc6749#section-2.2) |
 | **secret** | Used together with `uid` for client authentication |
 | **redirect_uri** | Redirects the resource owner to this URI \([spec](https://tools.ietf.org/html/rfc6749#section-3.1.2)\) |
 | **scopes** | Defines which [scopes](../configuration/scopes.md) the application uses |
@@ -31,7 +31,7 @@ If you set `enable_application_owner` configuration option then applications tab
 | **token** | Token value |
 | **refresh_token** | Refresh token value (used to refresh a token) |
 | **expires_in** | TTL of the token (in seconds) |
-| **revoked_at** | Date & time when tokes was revoked |
+| **revoked_at** | Date & time when token was revoked |
 | **created_at** | Creation date & time |
 | **scopes** | Access token scopes |
 | **previous_refresh_token**| Previous refresh token value |
@@ -53,11 +53,11 @@ have additional columns:
 | **token** | Token value |
 | **expires_in** | TTL of the token (in seconds) |
 | **redirect_uri** | Redirect URI |
-| **revoked_at** | Date & time when tokes was revoked |
+| **revoked_at** | Date & time when token was revoked |
 | **created_at** | Creation date & time |
 | **scopes** | Access token scopes |
 
-In case you're enabled PKCE flow you access grants table will include:
+In case you enabled PKCE flow, your access grants table will include:
 
 | Field | Purpose |
 | :--- | :--- |
