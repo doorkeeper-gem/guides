@@ -53,3 +53,4 @@ bundle exec rails generate doorkeeper:pkce
 
 This step is optional and you will be able to add this later if necessary.
 
+If you overrode the `doorkeeper/authorizations/new.html.erb` view, make sure that you have the `code_challenge` and `code_challenge_method` hidden form fields.
