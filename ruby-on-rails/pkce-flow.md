@@ -1,5 +1,10 @@
 # PKCE Flow
 
+## Links to specification:
+
+* [RFC 7636 - Proof Key for Code Exchange by OAuth Public Clients](https://tools.ietf.org/html/rfc7636)
+* [PKCE for OAuth 2.0](https://oauth.net/2/pkce/)
+
 ## Reason for **PKCE**
 
 On mobile apps common practice was: Usage of one hardcoded client_id and secret for all app installations on
@@ -54,3 +59,7 @@ bundle exec rails generate doorkeeper:pkce
 This step is optional and you will be able to add this later if necessary.
 
 If you overrode the `doorkeeper/authorizations/new.html.erb` view, make sure that you have the `code_challenge` and `code_challenge_method` hidden form fields.
+
+## PKCE and refresh tokens
+
+Discussion over PKCE flow and refresh tokens you can find here: https://github.com/doorkeeper-gem/doorkeeper/issues/1285
