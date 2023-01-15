@@ -59,6 +59,8 @@ bundle exec rails generate doorkeeper:pkce
 This step is optional and you will be able to add this later if necessary.
 
 If you overrode the `doorkeeper/authorizations/new.html.erb` view, make sure that you have the `code_challenge` and `code_challenge_method` hidden form fields.
+  
+Also, in case your client is public (e.g. mobile app, single page app) note that the `Doorkeeper::Application` for the client should have `confidential: false`. Otherwise Doorkeeper will try to authenticate the client using the client_secret, which the client, being public, shouldn't know about.
 
 ## PKCE and refresh tokens
 
