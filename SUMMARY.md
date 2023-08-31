@@ -33,13 +33,6 @@
 * [Upgrading](internals/upgrading.md)
 * [Creating extensions](internals/creating-extensions.md)
 
-## Concepts
-
-* [Application](concepts/application.md)
-* [Resource Owner](concepts/resource-owner.md)
-* [Access Grant](concepts/access-grant.md)
-* [Access Token](concepts/access-token.md)
-
 ## Security
 
 * [Token and Application Secrets](security/token-and-application-secrets.md)
