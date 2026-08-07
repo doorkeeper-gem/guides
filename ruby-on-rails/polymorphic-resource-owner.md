@@ -40,9 +40,15 @@ Use the feature!
 
 Now you can access resource owner by `doorkeeper_token.resource_owner` association.
 
-:warning: :warning:  **[ATTENTION]**: If you enabled this option on existing project - you need to
+:warning: :warning:  **[ATTENTION]**: If you enabled this option on an existing project — you need to
 manually set polymorphic type column with the class of the Resource Owner. Otherwise your existing
 users/clients could face issues and spam you logs with errors.
+
+You will need to run something like this in all your environments — replace `'Admin'` with your previous resource owner type:
+
+```ruby
+Doorkeeper::AccessToken.update_all(resource_owner_type: 'Admin')
+```
 
 :warning: :warning:  **[ATTENTION]**: Also this feature could be a breaking change for those users
 that patched Doorkeeper internals, specially models. You need to fix your patches to user `resource_owner`
