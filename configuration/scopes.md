@@ -61,7 +61,7 @@ With dynamic scopes enabled, clients can request scopes like `user:123` or `repo
 
 ### Scopes by Grant Type
 
-You can restrict which scopes are available per OAuth2 grant flow. By default all configured scopes are available for every grant type.
+You can restrict which scopes are available per OAuth 2.0 grant flow. By default all configured scopes are available for every grant type.
 
 ```ruby
 Doorkeeper.configure do

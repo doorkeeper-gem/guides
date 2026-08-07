@@ -2,6 +2,12 @@
 
 * [Doorkeeper Guides](README.md)
 
+## Concepts
+
+* [Application](concepts/application.md)
+* [Access Grant](concepts/access-grant.md)
+* [Access Token](concepts/access-token.md)
+
 ## Ruby on Rails
 
 * [Getting Started](ruby-on-rails/getting-started.md)
@@ -48,3 +54,4 @@
 * [Route Constraints and other integrations](configuration/route-constraints-and-other-integrations.md)
 * [Token Introspection](configuration/token-introspection.md)
 * [Token Revocation](configuration/token-revocation.md)
+* [Resource Indicators](configuration/resource-indicators.md)

@@ -6,7 +6,7 @@ default Doorkeeper models such as `Application`, `AccessToken` and `AccessGrant`
 By default Doorkeeper ActiveRecord ORM uses it's own classes:
 
 ```ruby
-# app/initializers/doorkeeper.rb
+# config/initializers/doorkeeper.rb
 
 Doorkeeper.configure do 
   access_token_class "Doorkeeper::AccessToken"
@@ -20,7 +20,7 @@ at least to **include** Doorkeeper ORM mixins into your custom models first:
 
 *  `::Doorkeeper::Orm::ActiveRecord::Mixins::AccessToken` - for access token
 *  `::Doorkeeper::Orm::ActiveRecord::Mixins::AccessGrant` - for access grant
-*  `::Doorkeeper::Orm::ActiveRecord::Mixins::Application` - for application (OAuth2 client)
+*  `::Doorkeeper::Orm::ActiveRecord::Mixins::Application` - for application (OAuth 2.0 client)
 
 An example of model customization:
 
