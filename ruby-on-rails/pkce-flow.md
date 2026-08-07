@@ -65,3 +65,59 @@ Also, in case your client is public (e.g. mobile app, single page app) note that
 ## PKCE and refresh tokens
 
 Discussion over PKCE flow and refresh tokens you can find here: https://github.com/doorkeeper-gem/doorkeeper/issues/1285
+
+## Forcing PKCE
+
+Starting from Doorkeeper 5.7.1, you can require PKCE for all non-confidential (public) clients
+by using the `force_pkce` option. When enabled, any public client that uses the authorization code
+grant flow must include a `code_challenge` and subsequently provide a valid `code_verifier` in the
+token request. Confidential clients are not affected.
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper.configure do
+  force_pkce
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+This is particularly useful when you know your application only serves public clients (e.g., mobile
+apps, single-page applications) and want to ensure the authorization code flow is always protected
+against code interception attacks.
+
+## Code Challenge Methods
+
+The `pkce_code_challenge_methods` option controls which code challenge transformation methods are
+accepted. The default is `%w[plain S256]`, supporting both methods.
+
+For better security, you can restrict Doorkeeper to accept only the `S256` method:
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper.configure do
+  pkce_code_challenge_methods %w[S256]
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+You can also add custom code challenge methods if your client-side implementation requires them:
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper.configure do
+  pkce_code_challenge_methods %w[S256 custom_method]
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+{% hint style="info" %}
+**Security recommendation:** Prefer `S256` over `plain`. The `plain` method transmits the
+`code_verifier` value directly as the `code_challenge`, which provides no cryptographic
+protection against an attacker who can intercept the authorization request.
+{% endhint %}

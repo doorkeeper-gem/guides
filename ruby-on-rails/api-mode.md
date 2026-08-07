@@ -1,6 +1,8 @@
 # API Mode
 
-By default Doorkeeper uses full Rails stack to provide all the OAuth 2 functionality with additional features like administration area for managing applications. By the way, starting from Doorkeeper 5 you can use API mode for your [API only Rails 5 applications](http://edgeguides.rubyonrails.org/api_app.html). All you need is just to configure the gem to work in desired mode:
+By default Doorkeeper uses full Rails stack to provide all the OAuth 2.0 functionality with additional features like
+administration area for managing applications. By the way, starting from Doorkeeper 5 you can use API mode for your
+[API only Rails applications](https://guides.rubyonrails.org/api_app.html). All you need is just to configure the gem to work in desired mode:
 
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}

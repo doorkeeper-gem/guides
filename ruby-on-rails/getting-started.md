@@ -35,7 +35,7 @@ $ bundle exec rails generate doorkeeper:migration
     create  db/migrate/20190324080634_create_doorkeeper_tables.rb
 ```
 
-This migration will create all necessary tables for [oAuth2 Applications](../concepts/application.md), [Access Grants](../concepts/access-grant.md), and [Access Tokens](../concepts/access-token.md). See [the database design](../internals/database-design.md) for more details.
+This migration will create all necessary tables for [OAuth 2.0 Applications](../concepts/application.md), [Access Grants](../concepts/access-grant.md), and [Access Tokens](../concepts/access-token.md). See [the database design](../internals/database-design.md) for more details.
 
 NOTE: If using UUIDs instead of integer IDs, see [Using PostgreSQL UUIDs as primary keys with Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-PostgreSQL-UUIDs-as-primary-keys-with-Doorkeeper) for changes you will need to make to your migration.
 

@@ -37,7 +37,55 @@ oauth_authorized_applications GET    /oauth/authorized_applications(.:format)   
 
 ```
 
-At this point on the guide, we're not going to change the routes. For more information on how to customize them, check out [this page on the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
+## Customizing routes
+
+The `use_doorkeeper` method accepts options and an optional block for customizing the generated
+routes. The following options are available:
+
+| Option | Description | Default |
+|---|---|---|
+| `scope` | URL path prefix for all OAuth routes. | `"oauth"` |
+
+Inside the `use_doorkeeper` block, you can further customize which controllers are mounted
+and how they are named:
+
+| Method | Description | Example |
+|---|---|---|
+| `skip_controllers` | Exclude one or more controllers from route generation. Valid values: `:applications`, `:authorized_applications`, `:authorizations`, `:tokens`, `:token_info`. | `skip_controllers :applications, :token_info` |
+| `controllers` | Override a controller class for a given route key. Valid keys: `:applications`, `:authorized_applications`, `:authorizations`, `:tokens`, `:token_info`. | `controllers applications: 'custom_applications'` |
+| `as` | Override the named-route helper prefix for a route group. Valid keys: `:authorizations`, `:tokens`, `:token_info`. | `as tokens: :api_token` |
+
+### Examples
+
+Customize the path prefix and skip the applications management UI:
+
+{% code-tabs %}
+{% code-tabs-item title="config/routes.rb" %}
+```ruby
+Rails.application.routes.draw do
+  use_doorkeeper scope: 'auth' do
+    skip_controllers :applications, :authorized_applications
+  end
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+Use a custom controller for managing OAuth applications:
+
+{% code-tabs %}
+{% code-tabs-item title="config/routes.rb" %}
+```ruby
+Rails.application.routes.draw do
+  use_doorkeeper do
+    controllers applications: 'admin/oauth_applications'
+  end
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+For additional customizations, see [this page on the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
 
 
 

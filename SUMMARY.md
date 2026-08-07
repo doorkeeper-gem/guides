@@ -2,6 +2,12 @@
 
 * [Doorkeeper Guides](README.md)
 
+## Concepts
+
+* [Application](concepts/application.md)
+* [Access Grant](concepts/access-grant.md)
+* [Access Token](concepts/access-token.md)
+
 ## Ruby on Rails
 
 * [Getting Started](ruby-on-rails/getting-started.md)
@@ -12,6 +18,8 @@
 * [API Mode](ruby-on-rails/api-mode.md)
 * [PKCE Flow](ruby-on-rails/pkce-flow.md)
 * [Polymorphic Resource Owner](ruby-on-rails/polymorphic-resource-owner.md)
+* [Grant Flows](ruby-on-rails/grant-flows.md)
+* [Controllers & Helpers](ruby-on-rails/controllers-and-helpers.md)
 
 ## Grape
 
@@ -44,3 +52,6 @@
 * [Skip Authorization](configuration/skip-authorization.md)
 * [Other Configurations](configuration/other-configurations.md)
 * [Route Constraints and other integrations](configuration/route-constraints-and-other-integrations.md)
+* [Token Introspection](configuration/token-introspection.md)
+* [Token Revocation](configuration/token-revocation.md)
+* [Resource Indicators](configuration/resource-indicators.md)
