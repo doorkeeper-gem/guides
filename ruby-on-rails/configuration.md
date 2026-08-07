@@ -1,6 +1,6 @@
 # Configuration
 
-Before you're able to use Doorkeeper, you need to configure how [resource owners](../concepts/resource-owner.md) \(users\) can be authenticated and who can manage such [applications](../concepts/application.md).
+Before you're able to use Doorkeeper, you need to configure how resource owners \(users\) can be authenticated and who can manage such applications.
 
 ## Resource Owner Authentication
 
@@ -53,3 +53,32 @@ The block follows the same rules as `resource_owner_authenticator` block.
 controller used by the list or skip the controller all together. For more information see the page
 [in the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
 {% endhint %}
+
+## Configuration overview
+
+The `Doorkeeper.configure` block in `config/initializers/doorkeeper.rb` is the central place for
+all Doorkeeper settings. Below is a high-level summary of the configuration categories available.
+For detailed information on each topic, follow the cross-links.
+
+- **Token settings** — expiration times, token generation, reuse, and revocation policies.
+  See [Other Configurations](../configuration/other-configurations.md) and
+  [Token Revocation](../configuration/token-revocation.md).
+- **Grant flows** — enabled grant types (authorization code, client credentials, implicit, password)
+  and per-client grant flow restrictions.
+  See [Other Configurations](../configuration/other-configurations.md).
+- **Scopes** — default and optional scopes, scope enforcement, and scopes by grant type.
+  See [Scopes](../configuration/scopes.md).
+- **Redirect URIs** — SSL enforcement, forbidden URI schemes, and blank redirect URI handling.
+  See [Other Configurations](../configuration/other-configurations.md).
+- **Application ownership** — opt-in application owner association with optional confirmation.
+  See [Models](../configuration/models.md).
+- **Token introspection** — custom introspection response fields and access control.
+  See [Token Introspection](../configuration/token-introspection.md).
+- **ORM and models** — ORM selection (`:active_record`), custom model classes for
+  `AccessToken`, `AccessGrant`, and `Application`.
+  See [Models](../configuration/models.md).
+- **Controllers** — base controller class, API-only mode, and custom controller overrides.
+  See [Other Configurations](../configuration/other-configurations.md).
+- **Security and hashing** — token and application secret hashing (SHA256, BCrypt), PKCE
+  enforcement, and client authentication methods.
+  See [Token and Application Secrets](../security/token-and-application-secrets.md).
