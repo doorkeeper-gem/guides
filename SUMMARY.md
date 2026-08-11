@@ -11,6 +11,7 @@
 ## Ruby on Rails
 
 * [Getting Started](ruby-on-rails/getting-started.md)
+* [Running Doorkeeper with Devise](ruby-on-rails/running-with-devise.md)
 * [Routes](ruby-on-rails/routes.md)
 * [Configuration](ruby-on-rails/configuration.md)
 * [Scopes](ruby-on-rails/scopes.md)
@@ -20,6 +21,7 @@
 * [Polymorphic Resource Owner](ruby-on-rails/polymorphic-resource-owner.md)
 * [Grant Flows](ruby-on-rails/grant-flows.md)
 * [Controllers & Helpers](ruby-on-rails/controllers-and-helpers.md)
+* [Customizing Views](ruby-on-rails/customizing-views.md)
 
 ## Grape
 
@@ -52,6 +54,7 @@
 * [Skip Authorization](configuration/skip-authorization.md)
 * [Other Configurations](configuration/other-configurations.md)
 * [Route Constraints and other integrations](configuration/route-constraints-and-other-integrations.md)
+* [Configuring CORS](configuration/cors.md)
 * [Token Introspection](configuration/token-introspection.md)
 * [Token Revocation](configuration/token-revocation.md)
 * [Resource Indicators](configuration/resource-indicators.md)
