@@ -37,6 +37,18 @@ Doorkeeper supports `ActiveRecord` by default, but can be configured to work wit
 | Couchbase | [acaprojects/doorkeeper-couchbase](https://github.com/acaprojects/doorkeeper-couchbase) |
 | RethinkDB | [aca-labs/doorkeeper-rethinkdb](https://github.com/aca-labs/doorkeeper-rethinkdb) |
 
+### Database maintenance
+
+Doorkeeper does **not** automatically remove expired or revoked tokens and grants. The `oauth_access_tokens` and `oauth_access_grants` tables grow indefinitely and can reach millions of rows if left unmanaged.
+
+Prune them periodically with the bundled rake task:
+
+```bash
+bundle exec rake doorkeeper:db:cleanup
+```
+
+This deletes expired and revoked access tokens and grants. See the [Rake tasks guide](https://doorkeeper.gitbook.io/guides/internals/rake) for details.
+
 ### Extensions
 
 Extensions that are not included by default and can be installed separately.
