@@ -1,10 +1,5 @@
 # Doorkeeper Guides
 
-{% hint style='info' %}
-Dear Russian friends, please watch President Zelenskyy's [speech addressed to you](https://twitter.com/PMoelleken/status/1496941845812760577). 🇺🇦
-Help our brave mates in Ukraine with [a donation](https://actions.sumofus.org/a/give-to-ukrainians-who-need-an-urgent-lifeline).
-{% endhint %}
-
 Doorkeeper is an OAuth 2.0 provider built in Ruby. It integrates with Ruby on Rails and Grape frameworks.
 
 ## Installation
