@@ -95,7 +95,7 @@ will raise `Doorkeeper::Errors::TokenForbidden`, `Doorkeeper::Errors::TokenExpir
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `access_token_methods` | `Array<Symbol>` | `%i[from_bearer_authorization from_access_token_param from_bearer_param]` | How the access token is extracted from the request. Order matters: first match wins. |
-| `client_credentials_methods` | `Array<Symbol>` | `%i[from_basic from_params]` | How client credentials (ID and secret) are extracted from the request. Order matters: first match wins. |
+| `client_credentials_methods` | `Array<Symbol>` | `%i[from_basic from_params]` | **Deprecated in 6.0** — use `client_authentication` instead. How client credentials (ID and secret) are extracted from the request. Order matters: first match wins. |
 
 ### Error Handling and Content
 
@@ -289,6 +289,10 @@ end
 
 By default it checks the `Authorization: Bearer <token>` header first, then the `access_token` parameter,
 then the `bearer_token` parameter. Client credentials are extracted similarly:
+
+{% hint style="warning" %}
+**Deprecated in Doorkeeper 6.0:** The `client_credentials` option below is deprecated. In 6.0+ use the new `client_authentication` option instead (see [Client Authentication](../ruby-on-rails/grant-flows.md#client-authentication)). The legacy syntax still works during the deprecation window — Doorkeeper automatically converts `:from_basic` to `client_secret_basic` and `:from_params` to `client_secret_post` — but it will be removed in a future major release.
+{% endhint %}
 
 ```ruby
 Doorkeeper.configure do
