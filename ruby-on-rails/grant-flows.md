@@ -24,6 +24,22 @@ This flow is enabled by default. It is the recommended choice for web applicatio
 
 For public clients (mobile apps, SPAs) that cannot keep a client secret, use the PKCE extension instead. See [PKCE Flow](pkce-flow.md).
 
+### Response Modes
+
+The Authorization Code flow supports three response modes that control how the authorization code is delivered back to the client:
+
+| Mode | Delivery method | Default |
+|---|---|---|
+| `query` | Appended as query parameters to the redirect URI | Yes |
+| `fragment` | Appended as a URI fragment (`#code=...`) | No |
+| `form_post` | Delivered via an auto-submitting HTML form POST to the redirect URI | No |
+
+{% hint style="info" %}
+The `fragment` and `form_post` response modes were introduced in Doorkeeper 5.5. Users on earlier versions only have `query` available for the Authorization Code flow.
+{% endhint %}
+
+To request a specific response mode, include `response_mode` in the authorization request (e.g., `response_mode=form_post`).
+
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}
 ```ruby
@@ -48,7 +64,10 @@ The Client Credentials flow is used for machine-to-machine communication where n
 
 Enabled by default.
 
-**Related config option:** `revoke_previous_client_credentials_token` — when enabled, any existing non-expired token for the same application is revoked before issuing a new one.
+**Related config options:**
+
+- `revoke_previous_client_credentials_token` — when enabled, any existing non-expired token for the same application (and same `resource`, when RFC 8707 Resource Indicators are in use) is revoked before issuing a new one.
+- `resource_indicator_validator` — when configured, enables [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) support so that tokens issued via client credentials can be audience-restricted to specific resource servers.
 
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}
@@ -56,6 +75,11 @@ Enabled by default.
 Doorkeeper.configure do
   # Enabled by default. Optionally revoke previous tokens:
   revoke_previous_client_credentials_token
+
+  # Optional: restrict tokens to specific resource servers (RFC 8707)
+  # resource_indicator_validator do |resource_indicators, client|
+  #   resource_indicators.all? { |r| allowed_apis.include?(r) }
+  # end
 end
 ```
 {% endcode-tabs-item %}
@@ -69,6 +93,19 @@ The Implicit flow was designed for browser-based clients (SPAs) where the access
 
 {% hint style="danger" %}
 **Security caveat (RFC 6819, Section 4.4.2):** The access token is exposed in the URL fragment, making it susceptible to leakage through browser history, referrer headers, and JavaScript access. There is no client authentication step. This flow is **not recommended for new applications**. Use the Authorization Code flow with PKCE instead.
+{% endhint %}
+
+### Response Modes
+
+The Implicit flow supports two response modes:
+
+| Mode | Delivery method | Default |
+|---|---|---|
+| `fragment` | Appended as a URI fragment (`#access_token=...`) | Yes |
+| `form_post` | Delivered via an auto-submitting HTML form POST to the redirect URI | No |
+
+{% hint style="info" %}
+The `form_post` response mode was introduced in Doorkeeper 5.5. Users on earlier versions only have `fragment` available for the Implicit flow.
 {% endhint %}
 
 To enable, add `"implicit"` to the `grant_flows` array:
@@ -98,7 +135,9 @@ Enabling this flow requires two pieces of configuration:
 1. Add `"password"` to `grant_flows`.
 2. Provide a `resource_owner_from_credentials` block that looks up and authenticates the user from the submitted username and password.
 
-You may also set `skip_client_authentication_for_password_grant` to `true` if you wish to allow public clients (without a client secret) to use this flow.
+{% hint style="warning" %}
+**Client authentication is required.** Since Doorkeeper 5.x, the Password grant requires valid client credentials (via HTTP Basic or the configured client authentication method). You may set `skip_client_authentication_for_password_grant` to `true` to allow public clients to use this flow, but this violates the OAuth spec and is discouraged. This option may be removed in a future major version.
+{% endhint %}
 
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}
@@ -111,6 +150,7 @@ Doorkeeper.configure do
   end
 
   # Optional: allow public clients to use this flow without a secret
+  # (NOT recommended — violates OAuth spec)
   # skip_client_authentication_for_password_grant true
 end
 ```
@@ -126,6 +166,10 @@ The Refresh Token flow allows a client to exchange a refresh token for a new acc
 This flow is **opt-in** via the `use_refresh_token` configuration method. It is not enabled by default.
 
 When you enable refresh tokens, Doorkeeper issues a `refresh_token` alongside every access token (across all grant flows that produce tokens). The optional block passed to `use_refresh_token` receives a context object with `client`, `grant_type`, and `scopes` and can return `true` or `false` to decide whether a refresh token should be issued for that specific request.
+
+{% hint style="info" %}
+**Automatic grant flow registration:** As of Doorkeeper 6.0, enabling `use_refresh_token` automatically registers the `refresh_token` grant flow in `calculate_grant_flows`. You do **not** need to add `"refresh_token"` to the `grant_flows` array explicitly. If you do list it explicitly without enabling `use_refresh_token`, a configuration-time warning is logged (since no refresh tokens would ever be issued).
+{% endhint %}
 
 ### Refresh Token Rotation
 
@@ -170,6 +214,10 @@ The registration API is exposed via `Doorkeeper::GrantFlow::Registry` (module), 
 | `response_type_matches` | The `response_type` parameter value this flow handles on the authorize endpoint (e.g., `"code"`). |
 | `response_type_strategy` | The request strategy class that processes authorization requests for this response type. |
 | `response_mode_matches` | An array of accepted response modes (e.g., `%w[query fragment form_post]`). |
+
+{% hint style="info" %}
+**Duplicate registration warning:** As of Doorkeeper 6.0, re-registering a flow that already exists emits a `[DOORKEEPER]` warning with the caller location. This helps catch accidental double-registrations from initializers or extensions.
+{% endhint %}
 
 You can also register aliases that expand into one or more existing flow names via `Doorkeeper::GrantFlow.register_alias`. This is useful when a single configuration name should enable multiple flows at once.
 
@@ -228,6 +276,10 @@ end
 
 This block receives the client (`Doorkeeper::Application`) and the resource owner (your user model instance). Return `true` to authorize the owner for that client, or `false` to deny. By default, all owners are authorized for all clients.
 
+{% hint style="info" %}
+As of Doorkeeper 6.0, a denied `authorize_resource_owner_for_client` returns the correct `access_denied` error (per RFC 6749 Section 4.1.2.1) rather than the previously incorrect `invalid_client`.
+{% endhint %}
+
 {% code-tabs %}
 {% code-tabs-item title="config/initializers/doorkeeper.rb" %}
 ```ruby
@@ -247,9 +299,110 @@ You can restrict which scopes are available to each grant type using the `scopes
 
 ---
 
+## Client Authentication
+
+Doorkeeper 6.0 introduces a pluggable client authentication registry. The new `client_authentication` config option replaces the deprecated `client_credentials` option.
+
+{% hint style="info" %}
+**Version note:** On Doorkeeper < 6.0, client credential extraction is configured with the legacy `client_credentials :from_basic, :from_params` syntax. If you are running an older version, see the [legacy client credentials configuration](../configuration/other-configurations.md#token-and-client-authentication-methods) for details. The legacy option continues to work in 6.0 with automatic conversion but emits a deprecation warning at boot.
+{% endhint %}
+
+### Built-in Methods
+
+| Method | Description |
+|---|---|
+| `client_secret_basic` | Client sends credentials via HTTP Basic Auth header (RFC 6749 §2.3.1). |
+| `client_secret_post` | Client sends `client_id` and `client_secret` in the request body. |
+| `none` | Public client authentication — only `client_id` is required, no secret. |
+| `private_key_jwt` | Client authenticates with a signed JWT assertion (RFC 7523 / OIDC Core §9). Requires the `jwt` gem >= 2.7. |
+
+{% hint style="warning" %}
+**Breaking change in 6.0:** Client credentials are no longer read from the query string. Send them in the request body or via HTTP Basic. This applies to token, revocation, and introspection endpoints.
+{% endhint %}
+
+{% hint style="warning" %}
+**Since 5.9.5:** Requests that use more than one client authentication method are rejected with `invalid_request` per RFC 6749 §2.3. This applies to all endpoints that authenticate clients (token, revocation, and introspection).
+{% endhint %}
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper.configure do
+  # Declare accepted client authentication methods and their order:
+  client_authentication %i[client_secret_basic client_secret_post none]
+
+  # Or enable private_key_jwt for enhanced security:
+  # client_authentication %i[client_secret_basic private_key_jwt]
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+### Registering Custom Authentication Methods
+
+You can register custom client authentication methods using `Doorkeeper::ClientAuthentication.register`:
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper::ClientAuthentication.register(
+  :my_custom_auth,
+  # ... strategy implementation
+)
+
+Doorkeeper.configure do
+  client_authentication %i[client_secret_basic my_custom_auth]
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+### private_key_jwt
+
+The `private_key_jwt` method (RFC 7523 / OIDC Core §9) allows clients to authenticate by sending a signed JWT assertion. The client's public keys are verified against `jwks` or `jwks_uri` attributes on the Application model.
+
+Configuration options:
+
+- `private_key_jwt_replay_guard` — jti single-use tracking. Defaults to a process-local store; supply a shared store for multi-process deployments (must respond to `first_use?(key, expires_at:)`).
+- `private_key_jwt_jwks_cache` — cache for JWK Sets fetched from `jwks_uri`. Defaults to a process-local cache with 60-second TTL.
+
+---
+
+## Authorization Server Metadata (RFC 8414)
+
+Doorkeeper 6.0 exposes an OAuth 2.0 Authorization Server Metadata endpoint at `/.well-known/oauth-authorization-server`. The response is built from your configuration and advertises:
+
+- Authorization, token, revocation, and introspection endpoints
+- Supported scopes, response types, grant types, and PKCE code challenge methods
+- `token_endpoint_auth_methods_supported` (derived from your `client_authentication` config)
+- `authorization_response_iss_parameter_supported` (when `issuer` is configured, per RFC 9207)
+
+{% code-tabs %}
+{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+```ruby
+Doorkeeper.configure do
+  # Set an explicit issuer (defaults to request base URL)
+  issuer "https://auth.example.com"
+
+  # Merge custom data into the metadata response
+  custom_metadata(
+    userinfo_endpoint: "https://auth.example.com/userinfo"
+  )
+end
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+### Issuer Identification (RFC 9207)
+
+When `issuer` is configured, Doorkeeper adds the `iss` parameter to authorization responses (both successful and error redirects). This helps clients verify the response origin and protect against mix-up attacks.
+
+---
+
 ## Further Reading
 
 - [PKCE Flow](pkce-flow.md) — the recommended flow for public clients
 - [Routes](routes.md) — mounted endpoints for `/oauth/authorize` and `/oauth/token`
 - [Configuration overview](configuration.md)
+- [Resource Indicators (RFC 8707)](../configuration/resource-indicators.md)
 - [Other Configurations](../configuration/other-configurations.md)
