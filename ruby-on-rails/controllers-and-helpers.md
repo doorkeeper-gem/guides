@@ -168,7 +168,7 @@ Override `Doorkeeper::ApplicationsController` to gate the admin UI behind your o
 ```ruby
 module Oauth
   class ApplicationsController < Doorkeeper::ApplicationsController
-    before_action :require_admin!, except: [:show]
+    before_action :require_admin!
 
     private
 
