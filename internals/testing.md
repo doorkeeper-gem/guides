@@ -36,6 +36,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     before do
       token = instance_double('Doorkeeper::AccessToken',
                               acceptable?: false,
+                              accessible?: false,
+                              revoked?: false,
+                              expired?: true,
                               resource_owner_id: nil)
       allow(controller).to receive(:doorkeeper_token).and_return(token)
     end
@@ -49,7 +52,13 @@ end
 ```
 
 The key is `acceptable?: true` — `doorkeeper_authorize!` checks this method,
-so a false value triggers a 401 (or 403 for scope mismatches).
+so a false value triggers a 401 (or 403 for scope mismatches). When it fails,
+Doorkeeper also calls `accessible?` to decide between 401 and 403, and on the
+401 path it then calls `revoked?` and `expired?` to pick the error reason, so
+a verifying double standing in for a rejected token must stub those too;
+otherwise RSpec raises an unexpected message error instead of returning the
+expected status. A double with `acceptable?: true` never reaches that code, so
+it needs none of them.
 
 ## Request specs (recommended)
 
