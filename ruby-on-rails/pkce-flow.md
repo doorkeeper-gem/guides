@@ -104,17 +104,9 @@ end
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-You can also add custom code challenge methods if your client-side implementation requires them:
-
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
-```ruby
-Doorkeeper.configure do
-  pkce_code_challenge_methods %w[S256 custom_method]
-end
-```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+Only `plain` and `S256` are valid values. Custom code challenge methods are not supported: if the
+option contains any other value, Doorkeeper logs a warning at boot and resets the option to the
+default `%w[plain S256]`, which silently re-enables `plain` even if you intended to disable it.
 
 {% hint style="info" %}
 **Security recommendation:** Prefer `S256` over `plain`. The `plain` method transmits the
