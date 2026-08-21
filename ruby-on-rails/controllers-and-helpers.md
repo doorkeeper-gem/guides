@@ -121,9 +121,9 @@ module Oauth
     def create
       super
 
-      if response.status == 200
+      if response.status == 200 && authorize_response.respond_to?(:token)
         body = JSON.parse(response.body)
-        body[:user_id] = token.resource_owner_id
+        body["user_id"] = authorize_response.token&.resource_owner_id
         self.response_body = body.to_json
       end
     end
@@ -132,6 +132,8 @@ end
 ```
 {% endcode-tabs-item %}
 {% endcode-tabs %}
+
+`JSON.parse` returns string keys, so add the new field with a string key too. Use `authorize_response.token` rather than the controller's `token` helper: the latter is a private helper for the revoke and introspect actions that looks up `params[:token]`, which a token request never carries — so it resolves to `nil` (or, if a client sends a stray `token` parameter, to an unrelated token). For most cases, the `custom_access_token_attributes` option or the `after_successful_strategy_response` hook (see [Other configurations](../configuration/other-configurations.md)) is a simpler way to extend the token response.
 
 ### Custom authorization flow
 
