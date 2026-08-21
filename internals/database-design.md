@@ -34,7 +34,7 @@ If you set `enable_application_owner` configuration option then applications tab
 | **revoked_at** | Date & time when token was revoked |
 | **created_at** | Creation date & time |
 | **scopes** | Access token scopes |
-| **previous_refresh_token**| Previous refresh token value |
+| **previous_refresh_token**| Optional column, created by the install migration. Holds the refresh token that was consumed to issue this token; it is revoked once this token is used for the first time. Drop the column to revoke refresh tokens immediately instead — see [Refresh Token Rotation](../ruby-on-rails/grant-flows.md#refresh-token-rotation) |
 
 If you enabled `use_polymorphic_resource_owner` configuration option then your database must
 have additional columns:
