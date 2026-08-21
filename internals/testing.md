@@ -146,6 +146,6 @@ These are the key controller methods provided by `Doorkeeper::Rails::Helpers`
 
 | Helper | Purpose |
 | :--- | :--- |
-| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token. Accepts optional scope names: `doorkeeper_authorize! :read, :write`. Renders 401 (invalid/missing token) or 403 (insufficient scopes). |
+| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token. Accepts optional scope names, combined with a logical **OR**: `doorkeeper_authorize! :read, :write` accepts a token that has either scope. Call the helper once per scope to require several at the same time. Renders 401 (invalid/missing token) or 403 (none of the required scopes). |
 | `doorkeeper_token` | Returns the current `Doorkeeper::AccessToken` instance (or nil). Memoized per-request via `OAuth::Token.authenticate`. |
 | `current_resource_owner` | Available as a view helper since 5.9.1. Defined in `Doorkeeper::Helpers::Controller` and exposed via `helper_method`. Returns `@current_resource_owner` or evaluates `Doorkeeper.config.authenticate_resource_owner`. |

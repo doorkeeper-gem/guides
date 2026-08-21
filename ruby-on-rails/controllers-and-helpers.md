@@ -59,7 +59,7 @@ Doorkeeper mixes `Doorkeeper::Rails::Helpers` into `ActionController::Base` (via
 | Helper | Returns / Does | Available in |
 |---|---|---|
 | `doorkeeper_token` | Returns the current `Doorkeeper::AccessToken` authenticated from the request (memoized). `nil` if no valid token is present. | All controllers (mixed into `ActionController::Base` by the Railtie). Also defined in `Helpers::Controller` for Doorkeeper's own controllers. |
-| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token with all specified scopes. Renders a 401 JSON response if the token is missing/invalid, or a 403 if the token is valid but missing required scopes. | All controllers (via `Doorkeeper::Rails::Helpers`). |
+| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token with **at least one** of the given scopes (logical OR). To require several scopes at the same time, call `doorkeeper_authorize!` once per scope. Renders a 401 JSON response if the token is missing/invalid, or a 403 if the token is valid but has none of the required scopes. | All controllers (via `Doorkeeper::Rails::Helpers`). |
 | `valid_doorkeeper_token?` | Returns `true` if the current token is present and satisfies the scopes passed to `doorkeeper_authorize!`. | All controllers. |
 | `current_resource_owner` | Returns the resource owner (user) of the current `doorkeeper_token`, evaluated via `Doorkeeper.config.authenticate_resource_owner`. Memoized. Registered as a view helper since 5.9.1. | All Doorkeeper controllers (via `Helpers::Controller`). |
 | `doorkeeper_unauthorized_render_options(error:)` | Override hook to customize the 401 response body. Receives the error object. Default is a no-op. | All controllers. |
@@ -94,10 +94,17 @@ end
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-Pass scopes to restrict access further:
+Pass scopes to restrict access further. Multiple scopes are combined with a logical OR, so this accepts a token that has `read` **or** `write`:
 
 ```ruby
 before_action -> { doorkeeper_authorize! :read, :write }
+```
+
+To require both scopes, call the helper once per scope:
+
+```ruby
+before_action -> { doorkeeper_authorize! :read }
+before_action -> { doorkeeper_authorize! :write }
 ```
 
 ## Customization patterns
