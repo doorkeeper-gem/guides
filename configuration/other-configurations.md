@@ -125,7 +125,7 @@ will raise `Doorkeeper::Errors::TokenForbidden`, `Doorkeeper::Errors::TokenExpir
 | `before_successful_authorization` | `Proc` | `->(_controller, _context = nil) {}` | Called before completing the authorization flow. Useful for single sign-out or audit logging. |
 | `after_successful_authorization` | `Proc` | `->(_controller, _context = nil) {}` | Called after a successful authorization with access to the issued token via the context. |
 | `before_successful_strategy_response` | `Proc` | `->(_request) {}` | Called before a token strategy renders its success response (e.g. before the token response body is built). |
-| `after_successful_strategy_response` | `Proc` | `->(_request, _response) {}` | Called after a token strategy renders its success response. Receives the request and the response body. |
+| `after_successful_strategy_response` | `Proc` | `->(_request, _response) {}` | Called after a token strategy builds its success response, before it is rendered. Receives the request and the `Doorkeeper::OAuth::TokenResponse`. |
 
 ---
 
@@ -406,7 +406,9 @@ Doorkeeper.configure do
   end
 
   after_successful_strategy_response do |request, response|
-    # response is the Doorkeeper::OAuth::TokenResponse about to be returned
+    # response is the Doorkeeper::OAuth::TokenResponse about to be returned.
+    # response.body is a mutable Hash with string keys, so extra fields can be added here:
+    #   response.body["user_id"] = response.token.resource_owner_id
     client_uid = request.client&.uid if request.respond_to?(:client)
     Rails.logger.info "Issued #{request.grant_type} token to client #{client_uid}"
   end
