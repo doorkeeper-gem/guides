@@ -416,8 +416,9 @@ end
 ```
 
 {% hint style="warning" %}
-`response.body` contains the plaintext `access_token` and `refresh_token`. Never write it to
-logs or any other persistent store; log the client, grant type or `response.token.id` instead.
+`response.body` always contains the plaintext `access_token`, plus the plaintext `refresh_token`
+whenever one was issued (blank values are dropped from the body). Never write it to logs or any
+other persistent store; log the client, grant type or `response.token.id` instead.
 {% endhint %}
 
 See also: [Scopes](scopes.md), [Models](models.md), [Token Introspection](token-introspection.md), [Token Revocation](token-revocation.md), [PKCE Flow](../ruby-on-rails/pkce-flow.md), [Token and Application Secrets](../security/token-and-application-secrets.md).
