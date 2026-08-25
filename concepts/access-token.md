@@ -13,7 +13,7 @@ An Access Token is the credential that a client uses to access protected resourc
 | `expires_in` | Time-to-live in seconds. Default is 7200 (2 hours), configurable via `access_token_expires_in`. |
 | `scopes` | The scopes granted to this token. |
 | `revoked_at` | Timestamp when the token was revoked (if applicable). |
-| `previous_refresh_token` | The refresh token that was consumed to issue this token (for refresh token rotation). |
+| `previous_refresh_token` | Optional column. When present, the refresh token that was consumed to issue this token is stored here and only revoked once this token is used for the first time (graceful rotation). Without the column, the consumed refresh token is revoked immediately on refresh. |
 
 ## Token lifecycle
 

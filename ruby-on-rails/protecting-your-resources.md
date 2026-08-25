@@ -12,6 +12,8 @@ class Api::V1::ProductsController < Api::V1::ApiController
 end
 ```
 
+Multiple scopes passed to `doorkeeper_authorize!` are combined with a logical **OR**, so the commented-out line above accepts a token that has `read` **or** `write`. To require several scopes at the same time, call the helper once per scope. See [Scopes](../configuration/scopes.md) for details.
+
 You can pass any option `before_action` accepts, such as `if`, `only`, `except`, and others.
 
 #### Authenticated resource owner

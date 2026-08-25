@@ -36,6 +36,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     before do
       token = instance_double('Doorkeeper::AccessToken',
                               acceptable?: false,
+                              accessible?: false,
+                              revoked?: false,
+                              expired?: true,
                               resource_owner_id: nil)
       allow(controller).to receive(:doorkeeper_token).and_return(token)
     end
@@ -49,7 +52,13 @@ end
 ```
 
 The key is `acceptable?: true` — `doorkeeper_authorize!` checks this method,
-so a false value triggers a 401 (or 403 for scope mismatches).
+so a false value triggers a 401 (or 403 for scope mismatches). When it fails,
+Doorkeeper also calls `accessible?` to decide between 401 and 403, and on the
+401 path it then calls `revoked?` and `expired?` to pick the error reason, so
+a verifying double standing in for a rejected token must stub those too;
+otherwise RSpec raises an unexpected message error instead of returning the
+expected status. A double with `acceptable?: true` never reaches that code, so
+it needs none of them.
 
 ## Request specs (recommended)
 
@@ -146,6 +155,6 @@ These are the key controller methods provided by `Doorkeeper::Rails::Helpers`
 
 | Helper | Purpose |
 | :--- | :--- |
-| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token. Accepts optional scope names: `doorkeeper_authorize! :read, :write`. Renders 401 (invalid/missing token) or 403 (insufficient scopes). |
+| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token. Accepts optional scope names, combined with a logical **OR**: `doorkeeper_authorize! :read, :write` accepts a token that has either scope. Call the helper once per scope to require several at the same time. Renders 401 (invalid/missing token) or 403 (none of the required scopes). |
 | `doorkeeper_token` | Returns the current `Doorkeeper::AccessToken` instance (or nil). Memoized per-request via `OAuth::Token.authenticate`. |
 | `current_resource_owner` | Available as a view helper since 5.9.1. Defined in `Doorkeeper::Helpers::Controller` and exposed via `helper_method`. Returns `@current_resource_owner` or evaluates `Doorkeeper.config.authenticate_resource_owner`. |

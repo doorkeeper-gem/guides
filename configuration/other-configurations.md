@@ -125,7 +125,7 @@ will raise `Doorkeeper::Errors::TokenForbidden`, `Doorkeeper::Errors::TokenExpir
 | `before_successful_authorization` | `Proc` | `->(_controller, _context = nil) {}` | Called before completing the authorization flow. Useful for single sign-out or audit logging. |
 | `after_successful_authorization` | `Proc` | `->(_controller, _context = nil) {}` | Called after a successful authorization with access to the issued token via the context. |
 | `before_successful_strategy_response` | `Proc` | `->(_request) {}` | Called before a token strategy renders its success response (e.g. before the token response body is built). |
-| `after_successful_strategy_response` | `Proc` | `->(_request, _response) {}` | Called after a token strategy renders its success response. Receives the request and the response body. |
+| `after_successful_strategy_response` | `Proc` | `->(_request, _response) {}` | Called after a token strategy builds its success response, before it is rendered. Receives the request and the `Doorkeeper::OAuth::TokenResponse`. |
 
 ---
 
@@ -367,22 +367,35 @@ This prevents `ActiveRecord::ReadOnlyError` on read replicas (Rails 6.1+).
 ## Lifecycle Hooks
 
 Doorkeeper provides four lifecycle hooks. The authorization hooks fire during the browser-based
-authorization flow:
+authorization flow, and on the token endpoint as well:
 
 ```ruby
 Doorkeeper.configure do
   before_successful_authorization do |controller, context|
     # e.g. single sign-out, audit logging
-    Rails.logger.info "Authorizing #{context[:pre_auth]&.client&.name}"
+    Rails.logger.info "Authorizing #{context&.pre_auth&.client&.name}"
   end
 
   after_successful_authorization do |controller, context|
-    # context includes the issued token
-    token = context[:issued_token]
-    Rails.logger.info "Issued token #{token.id}"
+    # context.issued_token is the object that was just issued: an AccessGrant
+    # for the authorization code flow, an AccessToken for the implicit flow
+    # and for every token endpoint request (this hook fires there too).
+    # It is nil in before_successful_authorization (nothing is issued yet).
+    token = context&.issued_token
+    Rails.logger.info "Issued #{token.class} #{token.id}" if token
   end
 end
 ```
+
+The `context` argument is a `Doorkeeper::OAuth::Hooks::Context` object, not a Hash: read it via
+`context.pre_auth`, `context.auth` and `context.issued_token`. It carries only what exists at that
+point in the flow — `pre_auth` before the authorization, `auth` (and therefore `issued_token`)
+after it — and the token endpoint calls `before_successful_authorization` with no context at all,
+so guard your accessors with `&.`. Despite its name, `before_successful_authorization` runs
+before the outcome is known, so on the token endpoint it also fires for requests that end up
+failing, while `after_successful_authorization` is not called for those. On the authorization
+endpoint the two hooks stand or fall together: a pre-authorization failure (`pre_auth.authorizable?`
+returning false) short-circuits the response before either of them runs.
 
 The strategy-response hooks fire during token endpoint requests:
 
@@ -393,10 +406,19 @@ Doorkeeper.configure do
   end
 
   after_successful_strategy_response do |request, response|
-    # response.body is the JSON about to be returned
-    Rails.logger.info "Token response: #{response.body}"
+    # response is the Doorkeeper::OAuth::TokenResponse about to be returned.
+    # response.body is a mutable Hash with string keys, so extra fields can be added here:
+    #   response.body["user_id"] = response.token.resource_owner_id
+    client_uid = request.client&.uid if request.respond_to?(:client)
+    Rails.logger.info "Issued #{request.grant_type} token to client #{client_uid}"
   end
 end
 ```
+
+{% hint style="warning" %}
+`response.body` always contains the plaintext `access_token`, plus the plaintext `refresh_token`
+whenever one was issued (blank values are dropped from the body). Never write it to logs or any
+other persistent store; log the client, grant type or `response.token.id` instead.
+{% endhint %}
 
 See also: [Scopes](scopes.md), [Models](models.md), [Token Introspection](token-introspection.md), [Token Revocation](token-revocation.md), [PKCE Flow](../ruby-on-rails/pkce-flow.md), [Token and Application Secrets](../security/token-and-application-secrets.md).

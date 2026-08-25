@@ -59,7 +59,7 @@ Doorkeeper mixes `Doorkeeper::Rails::Helpers` into `ActionController::Base` (via
 | Helper | Returns / Does | Available in |
 |---|---|---|
 | `doorkeeper_token` | Returns the current `Doorkeeper::AccessToken` authenticated from the request (memoized). `nil` if no valid token is present. | All controllers (mixed into `ActionController::Base` by the Railtie). Also defined in `Helpers::Controller` for Doorkeeper's own controllers. |
-| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token with all specified scopes. Renders a 401 JSON response if the token is missing/invalid, or a 403 if the token is valid but missing required scopes. | All controllers (via `Doorkeeper::Rails::Helpers`). |
+| `doorkeeper_authorize!(*scopes)` | `before_action` that requires a valid token with **at least one** of the given scopes (logical OR). To require several scopes at the same time, call `doorkeeper_authorize!` once per scope. Renders a 401 JSON response if the token is missing/invalid, or a 403 if the token is valid but has none of the required scopes. | All controllers (via `Doorkeeper::Rails::Helpers`). |
 | `valid_doorkeeper_token?` | Returns `true` if the current token is present and satisfies the scopes passed to `doorkeeper_authorize!`. | All controllers. |
 | `current_resource_owner` | Returns the resource owner (user) of the current `doorkeeper_token`, evaluated via `Doorkeeper.config.authenticate_resource_owner`. Memoized. Registered as a view helper since 5.9.1. | All Doorkeeper controllers (via `Helpers::Controller`). |
 | `doorkeeper_unauthorized_render_options(error:)` | Override hook to customize the 401 response body. Receives the error object. Default is a no-op. | All controllers. |
@@ -94,10 +94,17 @@ end
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-Pass scopes to restrict access further:
+Pass scopes to restrict access further. Multiple scopes are combined with a logical OR, so this accepts a token that has `read` **or** `write`:
 
 ```ruby
 before_action -> { doorkeeper_authorize! :read, :write }
+```
+
+To require both scopes, call the helper once per scope:
+
+```ruby
+before_action -> { doorkeeper_authorize! :read }
+before_action -> { doorkeeper_authorize! :write }
 ```
 
 ## Customization patterns
@@ -114,9 +121,9 @@ module Oauth
     def create
       super
 
-      if response.status == 200
+      if response.status == 200 && authorize_response.respond_to?(:token)
         body = JSON.parse(response.body)
-        body[:user_id] = token.resource_owner_id
+        body["user_id"] = authorize_response.token&.resource_owner_id
         self.response_body = body.to_json
       end
     end
@@ -125,6 +132,8 @@ end
 ```
 {% endcode-tabs-item %}
 {% endcode-tabs %}
+
+`JSON.parse` returns string keys, so add the new field with a string key too. Use `authorize_response.token` rather than the controller's `token` helper: the latter is a private helper for the revoke and introspect actions that looks up `params[:token]`, which a token request never carries — so it resolves to `nil` (or, if a client sends a stray `token` parameter, to an unrelated token). For most cases, the `after_successful_strategy_response` hook (see [Other configurations](../configuration/other-configurations.md)) is a simpler way to add fields to the token response: it receives the `Doorkeeper::OAuth::TokenResponse` before it is rendered, so it can write to `response.body` without subclassing this controller. `custom_access_token_attributes` is not an alternative here — it only persists extra attributes on the grant and the access token, and never changes the response body.
 
 ### Custom authorization flow
 
@@ -159,7 +168,7 @@ Override `Doorkeeper::ApplicationsController` to gate the admin UI behind your o
 ```ruby
 module Oauth
   class ApplicationsController < Doorkeeper::ApplicationsController
-    before_action :require_admin!, except: [:show]
+    before_action :require_admin!
 
     private
 
