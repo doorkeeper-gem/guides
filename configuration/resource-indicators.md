@@ -14,8 +14,8 @@ bundle exec rails db:migrate
 
 2. Configure a validator in your initializer:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   resource_indicator_validator ->(resource_indicators, client) {
@@ -24,8 +24,8 @@ Doorkeeper.configure do
   }
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The callable receives an array of resource URIs and the OAuth client. Return `true` to accept or `false` to reject with `invalid_target`.
 

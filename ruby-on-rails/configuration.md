@@ -11,8 +11,8 @@ This configuration should do two things:
 
 If you're using [devise](https://github.com/plataformatec/devise), one option is to write the following:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   resource_owner_authenticator do
@@ -20,8 +20,8 @@ Doorkeeper.configure do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The block above runs in the context of your application so you have access to your models, session
 and routes helpers. However, it is **not** run in the context of the `ApplicationController` which
@@ -34,8 +34,8 @@ You may want to check other ways of authentication [here](https://github.com/doo
 By default, the applications list in `/oauth/applications` is unavailable. To let users see and
 manage **all applications**, you should configure `admin_authenticator` block:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   admin_authenticator do |_routes|
@@ -43,8 +43,8 @@ Doorkeeper.configure do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The block follows the same rules as `resource_owner_authenticator` block.
 

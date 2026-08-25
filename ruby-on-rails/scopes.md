@@ -4,8 +4,8 @@ For this guide let's create two scopes: `read` and `write`. Applications authori
 
 Go to doorkeeper's initializer and add:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   default_scopes :read
@@ -14,8 +14,8 @@ Doorkeeper.configure do
   enforce_configured_scopes
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The last line with `enforce_configured_scopes` ensures applications to be able to ask only for configured scopes defined in `default_scopes` and `optional_scopes`.
 

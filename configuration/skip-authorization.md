@@ -12,25 +12,25 @@ Under some circumstances, you might want to let users skip the screen above and 
 
 This is possible via a configuration option `skip_authorization` which takes either `true` or `false`:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 skip_authorization do
   true
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 If you need more control over which application or user can skip the authorization, the resource owner and client will be available as block arguments:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 skip_authorization do |resource_owner, client|
   client.superapp? || resource_owner.admin?
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 

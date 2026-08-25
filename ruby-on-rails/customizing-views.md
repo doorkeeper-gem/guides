@@ -21,8 +21,8 @@ After generating, you can edit any file in `app/views/doorkeeper/` and your chan
 By default, Doorkeeper controllers render within their own layout. You can point each controller to your application's
 layout by adding a `config.to_prepare` block in `config/application.rb`:
 
-{% code-tabs %}
-{% code-tabs-item title="config/application.rb" %}
+{% tabs %}
+{% tab title="config/application.rb" %}
 ```ruby
 config.to_prepare do
   # Only Applications list
@@ -35,20 +35,20 @@ config.to_prepare do
   Doorkeeper::AuthorizedApplicationsController.layout "my_layout"
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 To apply the same layout to all Doorkeeper controllers at once, set it on the base class:
 
-{% code-tabs %}
-{% code-tabs-item title="config/application.rb" %}
+{% tabs %}
+{% tab title="config/application.rb" %}
 ```ruby
 config.to_prepare do
   Doorkeeper::ApplicationController.layout "my_layout"
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 You can also set the layout in an initializer (`config/initializers/doorkeeper.rb`), though `config.to_prepare` in `config/application.rb`
 is preferred because it runs after all initializers have loaded, ensuring your application's layout helpers are available.
@@ -58,8 +58,8 @@ is preferred because it runs after all initializers have loaded, ensuring your a
 Doorkeeper is an **isolated engine**. Inside its views, the routing context is Doorkeeper's own engine, not your main
 Rails application. This means every route helper and controller helper that belongs to your application must be prefixed with `main_app.`:
 
-{% code-tabs %}
-{% code-tabs-item title="app/views/doorkeeper/authorizations/new.html.erb" %}
+{% tabs %}
+{% tab title="app/views/doorkeeper/authorizations/new.html.erb" %}
 ```erb
 <% if main_app.user_signed_in? %>
   <%= link_to "Sign Out", main_app.destroy_user_session_path, method: :delete %>
@@ -67,8 +67,8 @@ Rails application. This means every route helper and controller helper that belo
   <%= link_to "Sign In", main_app.new_user_session_path %>
 <% end %>
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 This is the most common point of confusion when customizing Doorkeeper views. Forgetting `main_app.` will raise `NoMethodError` or produce broken links because the helper or route is looked up in the Doorkeeper engine namespace instead of your application's.
 
@@ -76,8 +76,8 @@ This is the most common point of confusion when customizing Doorkeeper views. Fo
 
 If you have helper methods in `ApplicationHelper` (or any other helper module) that you want to use directly inside Doorkeeper views without the `main_app.` prefix, include them in the Doorkeeper base controller:
 
-{% code-tabs %}
-{% code-tabs-item title="config/application.rb" %}
+{% tabs %}
+{% tab title="config/application.rb" %}
 ```ruby
 config.to_prepare do
   # Include only the ApplicationHelper module
@@ -87,8 +87,8 @@ config.to_prepare do
   Doorkeeper::ApplicationController.helper YourApp::Application.helpers
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Once included, your helper methods become available in Doorkeeper views just as they are in your own views.
 This is optional — you can always access application helpers through `main_app.` without any configuration change.

@@ -11,8 +11,8 @@ The central piece lives in the Doorkeeper initializer. The block runs in the
 context of your Rails application, so `current_user` (from Devise) and `warden`
 are available directly:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   resource_owner_authenticator do
@@ -22,8 +22,8 @@ Doorkeeper.configure do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 This block is also shown in the [Configuration](configuration.md) guide, which
 covers the rest of the Doorkeeper settings.
@@ -40,8 +40,8 @@ To break the loop, override `authenticate_scope!` in your registrations
 controller so it looks up the current resource **without** triggering a new
 authentication challenge:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/users/registrations_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/users/registrations_controller.rb" %}
 ```ruby
 class Users::RegistrationsController < Devise::RegistrationsController
   def authenticate_scope!
@@ -52,8 +52,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Make sure this controller is wired into your routes (Devise's default
 `registrations` routing will pick it up if you follow the standard
@@ -66,8 +66,8 @@ In your API controllers, you need a way to look up the user that owns the
 current access token. Use `find_by` rather than `find` to avoid raising an
 exception when the token is invalid or the user has been deleted:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/api/v1/api_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/api/v1/api_controller.rb" %}
 ```ruby
 class Api::V1::ApiController < ApplicationController
   private
@@ -77,8 +77,8 @@ class Api::V1::ApiController < ApplicationController
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The `doorkeeper_token` helper is provided by Doorkeeper after a successful
 `doorkeeper_authorize!` call. For a full example of protecting controller

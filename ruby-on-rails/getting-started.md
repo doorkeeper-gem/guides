@@ -43,15 +43,15 @@ NOTE: If using UUIDs instead of integer IDs, see [Using PostgreSQL UUIDs as prim
 
 Before executing the migration, you may want to add foreign keys to doorkeeper's tables to ensure data integrity. Go to the migration file and uncomment the lines below:
 
-{% code-tabs %}
-{% code-tabs-item title="db/migrate/20190324080634\_create\_doorkeeper\_tables.rb" %}
+{% tabs %}
+{% tab title="db/migrate/20190324080634\_create\_doorkeeper\_tables.rb" %}
 ```ruby
 # Uncomment below to ensure a valid reference to the resource owner's table
 add_foreign_key :oauth_access_grants, :users, column: :resource_owner_id
 add_foreign_key :oauth_access_tokens, :users, column: :resource_owner_id
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Now you're ready to run the migrations:
 
@@ -61,8 +61,8 @@ bundle exec rake db:migrate
 
 As the next step, you may want to add associations to your model. If you skip this step, you'll encounter `ActiveRecord::InvalidForeignKey`error when you try to destroy the `User` that has associated access grants or access tokens.
 
-{% code-tabs %}
-{% code-tabs-item title="app/models/user.rb" %}
+{% tabs %}
+{% tab title="app/models/user.rb" %}
 ```ruby
 class User < ApplicationRecord
   has_many :access_grants,
@@ -76,8 +76,8 @@ class User < ApplicationRecord
            dependent: :delete_all # or :destroy if you need callbacks
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 
 

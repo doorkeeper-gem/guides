@@ -20,8 +20,8 @@ All controllers live under `app/controllers/doorkeeper/`. The table below lists 
 
 Use the `controllers` mapping inside `use_doorkeeper` to point a route to your own subclass, then create that subclass in your application.
 
-{% code-tabs %}
-{% code-tabs-item title="config/routes.rb" %}
+{% tabs %}
+{% tab title="config/routes.rb" %}
 ```ruby
 Rails.application.routes.draw do
   use_doorkeeper do
@@ -29,11 +29,11 @@ Rails.application.routes.draw do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/oauth/applications_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/oauth/applications_controller.rb" %}
 ```ruby
 module Oauth
   class ApplicationsController < Doorkeeper::ApplicationsController
@@ -47,8 +47,8 @@ module Oauth
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 The same pattern applies to all controller keys: `:applications`, `:authorized_applications`, `:authorizations`, `:tokens`, and `:token_info`. See [Routes](routes.md) for the full `use_doorkeeper` DSL.
 
@@ -74,8 +74,8 @@ Doorkeeper mixes `Doorkeeper::Rails::Helpers` into `ActionController::Base` (via
 
 The most common pattern is calling `doorkeeper_authorize!` as a `before_action` in your own API controllers:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/api/v1/base_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/api/v1/base_controller.rb" %}
 ```ruby
 module Api
   module V1
@@ -91,8 +91,8 @@ module Api
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Pass scopes to restrict access further. Multiple scopes are combined with a logical OR, so this accepts a token that has `read` **or** `write`:
 
@@ -113,8 +113,8 @@ before_action -> { doorkeeper_authorize! :write }
 
 Override `Doorkeeper::TokensController` to modify the JSON returned by `POST /oauth/token`. The `create` action renders `authorize_response.body`, so hook into the response after a successful authorization:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/oauth/tokens_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/oauth/tokens_controller.rb" %}
 ```ruby
 module Oauth
   class TokensController < Doorkeeper::TokensController
@@ -130,8 +130,8 @@ module Oauth
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 `JSON.parse` returns string keys, so add the new field with a string key too. Use `authorize_response.token` rather than the controller's `token` helper: the latter is a private helper for the revoke and introspect actions that looks up `params[:token]`, which a token request never carries — so it resolves to `nil` (or, if a client sends a stray `token` parameter, to an unrelated token). For most cases, the `after_successful_strategy_response` hook (see [Other configurations](../configuration/other-configurations.md)) is a simpler way to add fields to the token response: it receives the `Doorkeeper::OAuth::TokenResponse` before it is rendered, so it can write to `response.body` without subclassing this controller. `custom_access_token_attributes` is not an alternative here — it only persists extra attributes on the grant and the access token, and never changes the response body.
 
@@ -139,8 +139,8 @@ end
 
 Subclass `Doorkeeper::AuthorizationsController` to add pre-authorization checks or a custom grant screen:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/oauth/authorizations_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/oauth/authorizations_controller.rb" %}
 ```ruby
 module Oauth
   class AuthorizationsController < Doorkeeper::AuthorizationsController
@@ -156,15 +156,15 @@ module Oauth
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### Restricting admin access
 
 Override `Doorkeeper::ApplicationsController` to gate the admin UI behind your own authorization logic:
 
-{% code-tabs %}
-{% code-tabs-item title="app/controllers/oauth/applications_controller.rb" %}
+{% tabs %}
+{% tab title="app/controllers/oauth/applications_controller.rb" %}
 ```ruby
 module Oauth
   class ApplicationsController < Doorkeeper::ApplicationsController
@@ -178,8 +178,8 @@ module Oauth
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
