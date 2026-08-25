@@ -2,16 +2,16 @@
 
 The installation script will also automatically add the Doorkeeper routes into your app:
 
-{% code-tabs %}
-{% code-tabs-item title="config/routes.rb" %}
+{% tabs %}
+{% tab title="config/routes.rb" %}
 ```ruby
 Rails.application.routes.draw do
   use_doorkeeper
   # your routes below
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 This will mount following routes:
 
@@ -59,8 +59,8 @@ and how they are named:
 
 Customize the path prefix and skip the applications management UI:
 
-{% code-tabs %}
-{% code-tabs-item title="config/routes.rb" %}
+{% tabs %}
+{% tab title="config/routes.rb" %}
 ```ruby
 Rails.application.routes.draw do
   use_doorkeeper scope: 'auth' do
@@ -68,13 +68,13 @@ Rails.application.routes.draw do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Use a custom controller for managing OAuth applications:
 
-{% code-tabs %}
-{% code-tabs-item title="config/routes.rb" %}
+{% tabs %}
+{% tab title="config/routes.rb" %}
 ```ruby
 Rails.application.routes.draw do
   use_doorkeeper do
@@ -82,8 +82,8 @@ Rails.application.routes.draw do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 For additional customizations, see [this page on the wiki](https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-routes).
 

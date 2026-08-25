@@ -9,8 +9,8 @@ Feature available only starting from Doorkeeper 5.4.
 
 Enable configuration option:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   orm :active_record
@@ -18,8 +18,8 @@ Doorkeeper.configure do
   use_polymorphic_resource_owner
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Generate migration to add polymorphic columns to tables:
 

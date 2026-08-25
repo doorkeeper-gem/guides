@@ -36,8 +36,8 @@ bundle install
 
 Next, create the CORS initializer:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/cors.rb" %}
+{% tabs %}
+{% tab title="config/initializers/cors.rb" %}
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
@@ -49,8 +49,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Place the middleware at position `0` (before all others) so that CORS headers are added on every
 response, including error responses from deeper in the stack.
@@ -60,8 +60,8 @@ response, including error responses from deeper in the stack.
 Where practical, scope the `resource` directive to the paths that actually need CORS instead of
 using `"*"`:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/cors.rb" %}
+{% tabs %}
+{% tab title="config/initializers/cors.rb" %}
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
@@ -77,8 +77,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Scoping limits which paths are reachable cross-origin and is a good security practice.
 

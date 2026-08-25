@@ -73,15 +73,15 @@ by using the `force_pkce` option. When enabled, any public client that uses the 
 grant flow must include a `code_challenge` and subsequently provide a valid `code_verifier` in the
 token request. Confidential clients are not affected.
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   force_pkce
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 This is particularly useful when you know your application only serves public clients (e.g., mobile
 apps, single-page applications) and want to ensure the authorization code flow is always protected
@@ -94,15 +94,15 @@ accepted. The default is `%w[plain S256]`, supporting both methods.
 
 For better security, you can restrict Doorkeeper to accept only the `S256` method:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   pkce_code_challenge_methods %w[S256]
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 Only `plain` and `S256` are valid values. Custom code challenge methods are not supported: if the
 option contains any other value, Doorkeeper logs a warning at boot and resets the option to the

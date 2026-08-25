@@ -6,13 +6,13 @@ Doorkeeper is an OAuth 2.0 provider built in Ruby. It integrates with Ruby on Ra
 
 The installation process depends on the framework you're using. The first step is to add `doorkeeper` to your `Gemfile`:
 
-{% code-tabs %}
-{% code-tabs-item title="# Gemfile" %}
+{% tabs %}
+{% tab title="# Gemfile" %}
 ```ruby
 gem 'doorkeeper'
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 And run `bundle install`. After this, make sure to follow the guide related to the framework you're using below.
 

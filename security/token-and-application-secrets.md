@@ -51,14 +51,14 @@ In this request, you need to ensure the user noted the secret since you will no 
 Since application secrets are to be treated as password, Doorkeeper also allows you to store secrets as BCrypt hashes.
 To enable it, simply add it to your Gemfile **This will add ~200ms latency to endpoints that verify client secret**: 
 
-{% code-tabs %}
-{% code-tabs-item title="Gemfile" %}
+{% tabs %}
+{% tab title="Gemfile" %}
 ```ruby
 gem 'doorkeeper'
 gem 'bcrypt', require: false
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 and then use the following configuration instead:
 

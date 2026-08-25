@@ -40,8 +40,8 @@ The `fragment` and `form_post` response modes were introduced in Doorkeeper 5.5.
 
 To request a specific response mode, include `response_mode` in the authorization request (e.g., `response_mode=form_post`).
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   # Authorization code is enabled by default — no config needed.
@@ -53,8 +53,8 @@ Doorkeeper.configure do
   force_pkce
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -69,8 +69,8 @@ Enabled by default.
 - `revoke_previous_client_credentials_token` — when enabled, any existing non-expired token for the same application (and same `resource`, when RFC 8707 Resource Indicators are in use) is revoked before issuing a new one.
 - `resource_indicator_validator` — when configured, enables [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) support so that tokens issued via client credentials can be audience-restricted to specific resource servers.
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   # Enabled by default. Optionally revoke previous tokens:
@@ -82,8 +82,8 @@ Doorkeeper.configure do
   # end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -110,15 +110,15 @@ The `form_post` response mode was introduced in Doorkeeper 5.5. Users on earlier
 
 To enable, add `"implicit"` to the `grant_flows` array:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   grant_flows %w[authorization_code client_credentials implicit]
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -139,8 +139,8 @@ Enabling this flow requires two pieces of configuration:
 **Client authentication is required.** Since Doorkeeper 5.x, the Password grant requires valid client credentials (via HTTP Basic or the configured client authentication method). You may set `skip_client_authentication_for_password_grant` to `true` to allow public clients to use this flow, but this violates the OAuth spec and is discouraged. This option may be removed in a future major version.
 {% endhint %}
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   grant_flows %w[authorization_code client_credentials password]
@@ -154,8 +154,8 @@ Doorkeeper.configure do
   # skip_client_authentication_for_password_grant true
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -187,8 +187,8 @@ bundle exec rails db:migrate
 
 The `previous_refresh_token` value is stored on the access token record only; it is never included in the token response body.
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   grant_flows %w[authorization_code client_credentials]
@@ -201,8 +201,8 @@ Doorkeeper.configure do
   # end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -226,8 +226,8 @@ The registration API is exposed via `Doorkeeper::GrantFlow::Registry` (module), 
 
 You can also register aliases that expand into one or more existing flow names via `Doorkeeper::GrantFlow.register_alias`. This is useful when a single configuration name should enable multiple flows at once.
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 # Register a custom grant flow
 Doorkeeper::GrantFlow.register(
@@ -247,8 +247,8 @@ Doorkeeper.configure do
   grant_flows %w[authorization_code client_credentials saml_bearer]
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ---
 
@@ -260,8 +260,8 @@ Doorkeeper provides two configuration blocks for controlling which flows a speci
 
 This block receives the grant flow name (as a string) and the client (`Doorkeeper::Application` instance). Return `true` to allow the client to use that flow, or `false` to reject with `unauthorized_client`. By default, all clients may use all enabled grant flows.
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   allow_grant_flow_for_client do |grant_flow, client|
@@ -274,8 +274,8 @@ Doorkeeper.configure do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### authorize_resource_owner_for_client
 
@@ -285,8 +285,8 @@ This block receives the client (`Doorkeeper::Application`) and the resource owne
 As of Doorkeeper 6.0, a denied `authorize_resource_owner_for_client` returns the correct `access_denied` error (per RFC 6749 Section 4.1.2.1) rather than the previously incorrect `invalid_client`.
 {% endhint %}
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   authorize_resource_owner_for_client do |client, resource_owner|
@@ -295,8 +295,8 @@ Doorkeeper.configure do
   end
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### Scopes by Grant Type
 
@@ -329,8 +329,8 @@ Doorkeeper 6.0 introduces a pluggable client authentication registry. The new `c
 **Since 5.9.5:** Requests that use more than one client authentication method are rejected with `invalid_request` per RFC 6749 §2.3. This applies to all endpoints that authenticate clients (token, revocation, and introspection).
 {% endhint %}
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   # Declare accepted client authentication methods and their order:
@@ -340,15 +340,15 @@ Doorkeeper.configure do
   # client_authentication %i[client_secret_basic private_key_jwt]
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### Registering Custom Authentication Methods
 
 You can register custom client authentication methods using `Doorkeeper::ClientAuthentication.register`:
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper::ClientAuthentication.register(
   :my_custom_auth,
@@ -359,8 +359,8 @@ Doorkeeper.configure do
   client_authentication %i[client_secret_basic my_custom_auth]
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### private_key_jwt
 
@@ -382,8 +382,8 @@ Doorkeeper 6.0 exposes an OAuth 2.0 Authorization Server Metadata endpoint at `/
 - `token_endpoint_auth_methods_supported` (derived from your `client_authentication` config)
 - `authorization_response_iss_parameter_supported` (when `issuer` is configured, per RFC 9207)
 
-{% code-tabs %}
-{% code-tabs-item title="config/initializers/doorkeeper.rb" %}
+{% tabs %}
+{% tab title="config/initializers/doorkeeper.rb" %}
 ```ruby
 Doorkeeper.configure do
   # Set an explicit issuer (defaults to request base URL)
@@ -395,8 +395,8 @@ Doorkeeper.configure do
   )
 end
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endtab %}
+{% endtabs %}
 
 ### Issuer Identification (RFC 9207)
 
