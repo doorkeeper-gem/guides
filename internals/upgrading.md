@@ -18,6 +18,11 @@ and take a look at the [CHANGELOG](https://github.com/doorkeeper-gem/doorkeeper/
 - **`client_via_uid` removed** ([#1296]). `Doorkeeper::Server#client_via_uid` was removed;
   `client_id` is now part of strong parameters.
 
+## Breaking changes in 6.0
+
+- **Client authentication registry** ([#1840]). Doorkeeper resolves client authentication through a registry of named strategies (`client_secret_basic`, `client_secret_post`, `none`) instead of hard-coded extractors. The `client_credentials` config option is deprecated in favour of `client_authentication`. Client credentials are no longer read from the query string, and public clients must not send a non-blank `Authorization` header. See the [migration guide](https://github.com/doorkeeper-gem/doorkeeper/wiki/Migration-from-old-versions#client-authentication-registry-1840) for full details.
+- **Fallback secret upgrade race fix** ([#1923]). When a fallback secret strategy is configured, the automatic upgrade on match now uses a conditional `update_all` (Active Record) instead of `#update`, fixing a race where a concurrent `#renew_secret` could be silently undone. Model callbacks and validations no longer run on this path. Applications without a fallback strategy are unaffected. See the [migration guide](https://github.com/doorkeeper-gem/doorkeeper/wiki/Migration-from-old-versions#fallback-secret-upgrade-race-fix-1923) for details.
+
 ## Breaking changes in 5.3
 
 - **Optional client credentials revocation** ([#1318]). Token revocation for client credentials
