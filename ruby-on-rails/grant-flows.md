@@ -371,7 +371,7 @@ Configuration options:
 - `private_key_jwt_replay_guard` — jti single-use tracking. Defaults to a process-local store; supply a shared store for multi-process deployments (must respond to `first_use?(key, expires_at:)`).
 - `private_key_jwt_jwks_cache` — cache for JWK Sets fetched from `jwks_uri`. Defaults to a process-local cache with 60-second TTL.
 
-The audiences accepted for an assertion (`aud`) are built from the server's own identity — `issuer`, or `Rails.application.routes.default_url_options[:host]` — never from the request's `Host` header. Configure at least one of them: with neither set, every assertion is refused and Doorkeeper logs an error at boot.
+The audiences accepted for an assertion (`aud`) are built from the server's own identity — the `issuer` option or `Rails.application.routes.default_url_options[:host]` — never from the request's `Host` header. Configure at least one of them; if neither is set, every assertion is refused and Doorkeeper logs an error at boot.
 
 ---
 
