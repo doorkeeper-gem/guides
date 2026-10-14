@@ -152,8 +152,7 @@ Rotating secrets depends on what you are rotating and whether hashing is enabled
 
 1. Regenerate the secret on the `Doorkeeper::Application` record (e.g., via the admin panel or a rake task that calls `application.renew_secret`).
 2. Distribute the new secret to all clients that authenticate with this application.
-3. The old secret is immediately invalidated. If you use `fallback: :plain` and had plaintext secrets, the old plaintext value will still
-4. be found until the record is updated with the new hashed value.
+3. The old secret is immediately invalidated. If you use `fallback: :plain` and had plaintext secrets, the old plaintext value will still be found until the record is updated with the new hashed value.
 
 **Access tokens:**
 
