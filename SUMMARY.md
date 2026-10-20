@@ -58,3 +58,4 @@
 * [Token Introspection](configuration/token-introspection.md)
 * [Token Revocation](configuration/token-revocation.md)
 * [Resource Indicators](configuration/resource-indicators.md)
+* [Client ID Metadata Documents](configuration/client-id-metadata-documents.md)

@@ -383,6 +383,7 @@ Doorkeeper 6.0 exposes an OAuth 2.0 Authorization Server Metadata endpoint at `/
 - Supported scopes, response types, grant types, and PKCE code challenge methods
 - `token_endpoint_auth_methods_supported` (derived from your `client_authentication` config)
 - `authorization_response_iss_parameter_supported` (when `issuer` is configured, per RFC 9207)
+- `client_id_metadata_document_supported` (when [Client ID Metadata Documents](../configuration/client-id-metadata-documents.md) are enabled)
 
 {% tabs %}
 {% tab title="config/initializers/doorkeeper.rb" %}
@@ -412,4 +413,5 @@ When `issuer` is configured, Doorkeeper adds the `iss` parameter to authorizatio
 - [Routes](routes.md) — mounted endpoints for `/oauth/authorize` and `/oauth/token`
 - [Configuration overview](configuration.md)
 - [Resource Indicators (RFC 8707)](../configuration/resource-indicators.md)
+- [Client ID Metadata Documents](../configuration/client-id-metadata-documents.md) — public clients identified by the URL of their metadata document
 - [Other Configurations](../configuration/other-configurations.md)
