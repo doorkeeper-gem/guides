@@ -23,29 +23,45 @@ When the user now starts App A and has to login again - after the redirect App B
 Versions now ask which app has to be opened - not so for iOS and old Android versions still on the market),
 gets the authorization code and can do a token request to make a valid access token out of it.
 
-### How can **PKCE** prevent this?
+### How does PKCE prevent authorization code interception?
 
-**PKCE** modifies the standard authorization code grant. Before starting the authorization code grant, a
-random string called `code_verifier` is generated using the characters: [A-Z], [a-z], [0-9], "-", ".", "_"
-and "~", with a minimum length of 43 characters and a maximum length of 128 characters. Additionally to the
-`code_verifier` a `code_challenge` is created. Doorkeeper supports two code_challenge_methods to generate
-the `code_challenge`. With `code_challenge_method` "plain" the `code_challenge` is the same as the `code_verifier`.
-With `code_challenge_method` "S256" the `code_challenge` is the SHA256 Hash value of the `code_verifier` url
-safe base64 encoded (without trailing "=" compare to: https://tools.ietf.org/html/rfc7636#appendix-A)
+**PKCE (Proof Key for Code Exchange)** extends the authorization code grant to
+protect against authorization code interception attacks.
 
-Now when the mobile app redirects into the browser to https://<doorkeeper-app>/oauth/authorize, add two
-parameters. Next to `client_id`, `redirect_uri`, `response_type=code`, `scope` or `state`, you add now
-`code_challenge` and `code_challenge_method`. *Remember*: doorkeeper supports the two methods "plain" and
-"S256". We do not recommend to use plain.
+Before starting the authorization flow, the client generates a
+cryptographically random string called the `code_verifier`. This value must
+contain between 43 and 128 characters from the following set: `A-Z`, `a-z`,
+`0-9`, `-`, `.`, `_`, and `~`.
 
-When your app opens after the redirect to the redirect_uri and the app got the `authorization_code`,
-add another parameter to your token request. Next to `code`, `client_id` or `grant_type`, you add the
-`code_verifier` to your /oauth/token POST request. Doorkeeper will now use the already known
-`code_challenge_method` to create its own `code_challenge` from `code_verifier` — and compare it to
-the already stored `code_challenge` from `/oauth/authorize` request. If they do not match, you get an
-error message to have done an `invalid_request`.
+The client then derives a `code_challenge` from the `code_verifier`. Doorkeeper
+supports two challenge methods:
 
-If now App B receives the authentication code, it cannot request a token for it, since it cannot know the nonce that was created only for this one request.
+- **`S256` (recommended):** The client computes the SHA-256 hash of the
+  `code_verifier` and encodes the result using Base64url without padding.
+- **`plain`:** The `code_challenge` is identical to the `code_verifier`. This
+  method is supported for compatibility but should be avoided.
+
+When the client redirects the user to `/oauth/authorize`, it includes
+`code_challenge` and `code_challenge_method` alongside the standard
+authorization request parameters, such as `client_id`, `redirect_uri`,
+`response_type=code`, `scope`, and `state`.
+
+After the user authorizes the request, Doorkeeper redirects the browser to the
+client's `redirect_uri` with an authorization code.
+
+The client then sends a POST request to `/oauth/token`, including the
+authorization `code`, the original `code_verifier`, and the other required
+token request parameters.
+
+Doorkeeper applies the previously specified `code_challenge_method` to the
+submitted `code_verifier` and compares the result with the `code_challenge`
+associated with the authorization code. If the values do not match, Doorkeeper
+rejects the token request with an `invalid_grant` error.
+
+**This prevents authorization code interception attacks.** Even if a malicious
+application (App B) intercepts the authorization code, it cannot exchange that
+code for an access token without the original `code_verifier`, which is known
+only to the legitimate client (App A).
 
 ## Enable PKCE in Doorkeeper
 
